@@ -125,14 +125,14 @@ mutual
   to-< : {a b : O.𝒪} -> a O.< b -> (to a) < (to b)
   to-< {b = O.𝟎}              (O.<₁ p) = ⊥-elim (p refl)
   to-< {b = O.ω^ a + c [ r ]} (O.<₁ p) = <₁ (λ ())
-  to-<                      (O.<₂ p) = <₂ (to-< p)
-  to-<                      (O.<₃ p) = <₃ (to-< p)
+  to-<                        (O.<₂ p) = <₂ (to-< p)
+  to-<                        (O.<₃ p) = <₃ (to-< p)
 
   to-≥ : {a b : O.𝒪} -> a O.≥ O.fst b -> (to a) ≥fst (to b)
-  to-≥ {b = O.𝟎}              (inj₁ p) = inj₁ (_ , fst𝟎 , to-< p)
-  to-≥ {b = O.ω^ b + c [ r ]} (inj₁ p) = inj₁ (_ , fst[ω^b+[…]] , to-< p)
-  to-≥ {b = O.𝟎}              (inj₂ refl) = inj₂ fst𝟎
-  to-≥ {b = O.ω^ b + c [ r ]} (inj₂ refl) = inj₂ fst[ω^b+[…]]
+  to-≥ {b = O.𝟎}               (inj₁ p)    = inj₁ (_ , fst𝟎 , to-< p)
+  to-≥ {b = O.ω^ b + b₁ [ x ]} (inj₁ p)    = inj₁ (_ , fst[ω^b+[…]] , to-< p)
+  to-≥ {b = O.𝟎}               (inj₂ refl) = inj₂ fst𝟎
+  to-≥ {b = O.ω^ b + c [ r ]}  (inj₂ refl) = inj₂ (fst[ω^b+[…]] {s = to-≥ r})
 
 mutual
 
