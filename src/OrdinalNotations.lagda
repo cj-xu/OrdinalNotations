@@ -31,7 +31,7 @@ open import Data.Empty.Irrelevant
 open import Relation.Nullary using (¬_)
 open import Relation.Binary.PropositionalEquality using (_≢_; sym; cong)
 open import Data.Sum using (inj₁; inj₂) renaming (_⊎_ to _∨_)
-open import Data.String.Base as String using (String; primStringAppend)
+open import Data.String.Base as String using (_++_ ; String)
 open import Data.Nat using (ℕ; suc)
 open import Data.Nat.Show renaming (show to showℕ)
 
@@ -112,11 +112,6 @@ toℕ a _ = ∣ a ∣
 ■ Showing ordinals
 
 \begin{code}
-
-infixl 10 _++_
-
-_++_ : String → String → String
-_++_ = primStringAppend
 
 mutual
  show : 𝒪 → String
