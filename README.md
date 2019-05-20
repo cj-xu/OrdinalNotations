@@ -7,6 +7,6 @@ An [html rendering of the Agda code](http://cj-xu.github.io/agda/ordinals/index.
 - [Chuangjie Xu](http://cj-xu.github.io/)
 - [Fredrik Nordvall Forsberg](https://personal.cis.strath.ac.uk/fredrik.nordvall-forsberg/)
 
-## Prerequisites
-- Agda version 2.6.0
-- Agda's standard library Version 1.0
+## Tested with
+- Agda version 2.6.0.1
+- Agda's standard library Version 1.0.1
