@@ -4,13 +4,15 @@
                    --------------------------
 
                           Chuangjie Xu
-               August 2018, updated in April 2019
+            August 2018, updated in April & July 2019
 
 
 We define ordinal arithmetic operations for our ordinal notations
 including addition, subtraction, multiplication and exponentiation.
 
 \begin{code}
+
+{-# OPTIONS --safe #-}
 
 module OrdinalArithmetic where
 
@@ -62,7 +64,6 @@ mutual
    u₁ : .(a ≥ b) → 𝒪
    u₁ h = ω^ a + (c + ω^ b + d [ s ]) [ Lm[≥+] a c _ r h ]
 
- {-# TERMINATING #-}
  Lm[≥+] : (a b c : 𝒪) → a ≥ fst b → a ≥ fst c → a ≥ fst (b + c)
  Lm[≥+] a  𝟎                c               r s = s
  Lm[≥+] a (ω^ b + d [ u ])  𝟎               r s = r
@@ -71,15 +72,9 @@ mutual
    lemma : {x y z : 𝒪} → x ≥ y → z ≡ y → x ≥ z
    lemma r refl = r 
    w₀ : b < c → a ≥ fst (ω^ b + d [ u ] + ω^ c + e [ v ])
-   w₀ w = lemma s (cong fst p)
-    where
-     p : ω^ b + d [ u ] + ω^ c + e [ v ] ≡ ω^ c + e [ v ]
-     p = case-spec₀ Lm[<→¬≥] <-tri w
+   w₀ w = lemma s (cong fst (case-spec₀ Lm[<→¬≥] <-tri w))
    w₁ : b ≥ c → a ≥ fst (ω^ b + d [ u ] + ω^ c + e [ v ])
-   w₁ w = lemma r (cong fst p)
-    where
-     p : ω^ b + d [ u ] + ω^ c + e [ v ] ≡ ω^ b + _ [ _ ]
-     p = case-spec₁ Lm[<→¬≥] <-tri w
+   w₁ w = lemma r (cong fst (case-spec₁ {g = λ h → ω^ b + _ [ _ ]} Lm[<→¬≥] <-tri w))
 
 --
 -- Embedding of ℕ into 𝒪

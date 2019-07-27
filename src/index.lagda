@@ -16,7 +16,14 @@ The source files are available at
 
     https://github.com/cj-xu/OrdinalNotations
 
+All the files are tested in the safe mode of Agda version 2.6.0.1 with
+Agda's standard library Version 1.0.1.
 
+\begin{code}
+
+{-# OPTIONS --safe #-}
+
+\end{code}
 
 ■ An inductive-inductive-recursive definition of ordinal notations
 
@@ -41,6 +48,20 @@ including addition, subtraction, multiplication and exponentiation.
 \begin{code}
 
 import OrdinalArithmetic
+
+\end{code}
+
+■ Transfinite induction
+
+We prove that our simultaneous definition 𝒪 of ordinal notations is
+well-founded and hence have the transfinite induction principle for 𝒪.
+Using this, we prove a computational version of the statement
+
+  there is no infinite descending sequence of ordinals below ε₀.
+
+\begin{code}
+
+import TransfiniteInduction
 
 \end{code}
 

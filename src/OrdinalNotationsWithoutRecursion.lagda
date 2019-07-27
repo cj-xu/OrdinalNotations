@@ -18,6 +18,8 @@ one, which is known to be sound.
 
 \begin{code}
 
+{-# OPTIONS --safe #-}
+
 module OrdinalNotationsWithoutRecursion where
 
 open import Agda.Builtin.Equality

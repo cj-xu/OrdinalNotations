@@ -23,6 +23,8 @@ definition of ordinal notations.
 
 \begin{code}
 
+{-# OPTIONS --safe #-}
+
 module OrdinalNotations where
 
 open import Agda.Builtin.Equality
