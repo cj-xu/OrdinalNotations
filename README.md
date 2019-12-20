@@ -1,12 +1,21 @@
-# Ordinal notations via simultaneous definitions
-We define an ordinal notation system simultaneously with its ordering.  Our simultaneous definitions generate only the ordinal terms in Cantor normal form which are in one-to-one correspondence with the ordinals below ε₀.  We implement the ordinal notation system as inductive-inductive-recursive definitions in Agda. We also prove the transfinite induction principle for our ordinal notations.
+# Three equivalent ordinal notation systems in Cubical Agda
+We present three ordinal notation systems representing ordinals below
+ε₀ in type theory, using recent type-theoretical innovations such as
+mutual inductive-inductive definitions and higher inductive types.  As
+case studies, we show how basic ordinal arithmetic can be developed
+for these systems, and how they admit a transfinite induction
+principle.  We prove that all three notation systems are equivalent,
+so that we can transport results between them using the univalence
+principle.
 
-An [html rendering of the Agda code](http://cj-xu.github.io/agda/ordinals/index.html) is available at Chuangjie Xu's GitHub web page.
+An [html rendering of the cubical Agda code](http://cj-xu.github.io/agda/ordinals/index.html) is available at Chuangjie Xu's GitHub web page.
 
 ## Authors
 - [Chuangjie Xu](http://cj-xu.github.io/)
 - [Fredrik Nordvall Forsberg](https://personal.cis.strath.ac.uk/fredrik.nordvall-forsberg/)
 
 ## Tested with
-- Agda version 2.6.0.1
-- Agda's standard library Version 1.0.1
+- Agda development version 2.6.1 (commit: 4af7b92663d2eb1dd94383b140eb7acfeb1b1eb0)
+- Cubical Agda library (commit: d7e345d3bcaefbc066d057487fca9677de7e29c7)
+
+
