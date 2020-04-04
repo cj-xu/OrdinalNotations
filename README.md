@@ -15,7 +15,5 @@ An [html rendering of the cubical Agda code](http://cj-xu.github.io/agda/ordinal
 - [Fredrik Nordvall Forsberg](https://personal.cis.strath.ac.uk/fredrik.nordvall-forsberg/)
 
 ## Tested with
-- Agda development version 2.6.1 (commit: 4af7b92663d2eb1dd94383b140eb7acfeb1b1eb0)
-- Cubical Agda library (commit: d7e345d3bcaefbc066d057487fca9677de7e29c7)
-
-
+- [Agda](https://github.com/agda/agda/) development version 2.6.2 (commit: 292237b2da99a57cb2bef78ab38d5d45f9fb316c)
+- [Cubical Agda library](https://github.com/agda/cubical/) (commit: 233263c7e13bc987382f92c47922820fdcffdb81)
