@@ -62,7 +62,7 @@ ind A a₀ _⋆_ ⋆swap sv (swap x y z i) =
         (ind A a₀ _⋆_ ⋆swap sv y)
         (ind A a₀ _⋆_ ⋆swap sv z) i
 ind A a₀ _⋆_ ⋆swap sv (trunc p q i j) =
-  isOfHLevel→isOfHLevelDep {n = 2}
+  isOfHLevel→isOfHLevelDep 2
                            (λ x a b → sv {x} {a} {b})
                            _ _
                            (cong (ind A a₀ _⋆_ ⋆swap sv) p)
