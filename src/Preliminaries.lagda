@@ -54,9 +54,10 @@ open import Agda.Builtin.Cubical.Glue public
        )
 
 open import Cubical.Data.Empty public
- using ( ⊥
-       ; ⊥-elim
-       )
+ using    ( ⊥
+          )
+ renaming ( rec to ⊥-elim
+          )
 
 open import Cubical.Relation.Nullary public
  using ( ¬_
