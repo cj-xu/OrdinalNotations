@@ -16,10 +16,10 @@ principle.
 All the files are tested with
 
 • Agda development version 2.6.2
-  (commit: 292237b2da99a57cb2bef78ab38d5d45f9fb316c)
+  (commit: 2479f0a7122a41ac15f5699dc87ed41ed72cbd0e)
 
 • Cubical Agda library
-  (commit: 233263c7e13bc987382f92c47922820fdcffdb81)
+  (commit: 390ac95aa2f87a131844aabe20a7b3ed81d608f4)
 
 \begin{code}
 

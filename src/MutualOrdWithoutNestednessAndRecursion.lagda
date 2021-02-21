@@ -166,7 +166,9 @@ to-> (M.<₂ r) = <₂ (to-> r)
 to-> (M.<₃ p r) = <₃ (cong to p) (to-> r)
 
 to-≥ {b = M.𝟎} (inj₁ M.<₁) = inj₁ (_ , fst𝟎 , <₁)
-to-≥ {b = M.ω^ b + c [ r ]} (inj₁ p) = inj₁ (_ , fstω , to-> p)
+to-≥ {b = M.ω^ _ + c [ r ]} (inj₁ M.<₁) = inj₁ (_ , fstω , <₁)
+to-≥ {b = M.ω^ _ + c [ r ]} (inj₁ (M.<₂ p)) = inj₁ (_ , fstω , <₂ (to-> p))
+to-≥ {b = M.ω^ _ + c [ r ]} (inj₁ (M.<₃ e p)) = inj₁ (_ , fstω , <₃ (cong to e) (to-> p))
 to-≥ {b = M.𝟎} (inj₂ r') with PropEqfromPath r'
 ... | P.refl = inj₂ fst𝟎
 to-≥ {b = M.ω^ b + c [ r ]} (inj₂ p)  with PropEqfromPath p
@@ -206,6 +208,7 @@ establish that again _<_ is Prop-valued. The proof is the same as
 before, and so not very interesting.
 
 \begin{code}
+
 rest : MutualOrd → MutualOrd
 rest  𝟎               = 𝟎
 rest (ω^ _ + b ≡[ _ ]) = b
@@ -291,12 +294,32 @@ MutualOrd⁼ : {r : a ≥fst b} {s : c ≥fst d} → a ≡ c → b ≡ d
 MutualOrdIsDiscrete 𝟎 𝟎 = yes refl
 MutualOrdIsDiscrete (ω^ a + b ≡[ r ]) (ω^ a' + b' ≡[ r' ]) with MutualOrdIsDiscrete a a'
 MutualOrdIsDiscrete ω^ a + b ≡[ r ] ω^ a' + b' ≡[ r' ] | yes a≡a' with MutualOrdIsDiscrete b b'
-MutualOrdIsDiscrete ω^ a + b ≡[ r ] ω^ a' + b' ≡[ r' ] | yes a≡a' | yes b≡b' = yes (MutualOrd⁼ a≡a' b≡b')
+{--- Pattern match on b, to please Agda's termination checker ---}
+MutualOrdIsDiscrete ω^ a + 𝟎 ≡[ r ] ω^ a' + b' ≡[ r' ] | yes a≡a' | yes 𝟎≡b'
+  with PropEqfromPath a≡a' | PropEqfromPath 𝟎≡b'
+... | P.refl | P.refl = yes (cong (ω^ a + 𝟎 ≡[_]) (≡fstIsPropValued r r'))
+MutualOrdIsDiscrete ω^ a + b@(ω^ _ + _ ≡[ _ ]) ≡[ r ] ω^ a' + b' ≡[ r' ] | yes a≡a' | yes b≡b'
+  with PropEqfromPath a≡a' | PropEqfromPath b≡b'
+... | P.refl | P.refl = yes (cong (ω^ a + b ≡[_]) (≡fstIsPropValued r r'))
+MutualOrdIsDiscrete ω^ a + b@(ω^ _ + _ >[ _ ]) ≡[ r ] ω^ a' + b' ≡[ r' ] | yes a≡a' | yes b≡b'
+  with PropEqfromPath a≡a' | PropEqfromPath b≡b'
+... | P.refl | P.refl = yes (cong (ω^ a + b ≡[_]) (≡fstIsPropValued r r'))
+{------------------- End of pattern matching --------------------}
 MutualOrdIsDiscrete ω^ a + b ≡[ r ] ω^ a' + b' ≡[ r' ] | yes p | no b≠b' = no λ e → b≠b' (cong rest e)
 MutualOrdIsDiscrete ω^ a + b ≡[ r ] ω^ a' + b' ≡[ r' ] | no a≠a' = no λ e → a≠a' (cong fst e)
 MutualOrdIsDiscrete (ω^ a + b >[ r ]) (ω^ a' + b' >[ r' ]) with MutualOrdIsDiscrete a a'
 MutualOrdIsDiscrete ω^ a + b >[ r ] ω^ a' + b' >[ r' ] | yes a≡a' with MutualOrdIsDiscrete b b'
-MutualOrdIsDiscrete ω^ a + b >[ r ] ω^ a' + b' >[ r' ] | yes a≡a' | yes b≡b' = yes (MutualOrd⁼ a≡a' b≡b')
+{--- Pattern match on b, to please Agda's termination checker ---}
+MutualOrdIsDiscrete ω^ a + 𝟎 >[ r ] ω^ a' + b' >[ r' ] | yes a≡a' | yes 𝟎≡b'
+  with PropEqfromPath a≡a' | PropEqfromPath 𝟎≡b'
+... | P.refl | P.refl = yes (cong (ω^ a + 𝟎 >[_]) (>fstIsPropValued r r'))
+MutualOrdIsDiscrete ω^ a + b@(ω^ _ + _ ≡[ _ ]) >[ r ] ω^ a' + b' >[ r' ] | yes a≡a' | yes b≡b'
+  with PropEqfromPath a≡a' | PropEqfromPath b≡b'
+... | P.refl | P.refl = yes (cong (ω^ a + b >[_]) (>fstIsPropValued r r'))
+MutualOrdIsDiscrete ω^ a + b@(ω^ _ + _ >[ _ ]) >[ r ] ω^ a' + b' >[ r' ] | yes a≡a' | yes b≡b'
+  with PropEqfromPath a≡a' | PropEqfromPath b≡b'
+... | P.refl | P.refl = yes (cong (ω^ a + b >[_]) (>fstIsPropValued r r'))
+{------------------- End of pattern matching --------------------}
 MutualOrdIsDiscrete ω^ a + b >[ r ] ω^ a' + b' >[ r' ] | yes p | no b≠b' = no λ e → b≠b' (cong rest e)
 MutualOrdIsDiscrete ω^ a + b >[ r ] ω^ a' + b' >[ r' ] | no a≠a' = no λ e → a≠a' (cong fst e)
 MutualOrdIsDiscrete (ω^ a + b ≡[ r ]) (ω^ a' + b' >[ r' ]) = no ω≡≢ω>
@@ -334,7 +357,7 @@ MutualOrd⁼ {a} {b} a≡c b≡d with PropEqfromPath a≡c | PropEqfromPath b≡
 
 Using this, it is easy to check that the roundtrips are identities:
 
-\begin{code}
+
 
 from-to : ∀ a → from (to a) ≡ a
 from-to M.𝟎 = refl

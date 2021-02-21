@@ -24,8 +24,6 @@ open import Agda.Primitive public
 
 open import Cubical.Foundations.Everything public
  using ( _∘_     -- function composition
-       ; Type₀
-       ; Type₁
        ; Type    -- universes, renamed from Set to Type
        ; ~_      -- interval reversal
        ; _∧_     -- interval minimum

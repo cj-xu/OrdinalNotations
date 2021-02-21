@@ -15,6 +15,7 @@ terms and an ordering on them.
 module MutualOrd where
 
 open import Preliminaries
+import Agda.Builtin.Equality as P
 
 \end{code}
 
@@ -79,8 +80,6 @@ caseMutualOrd x y (ω^ _ + _ [ _ ]) = y
 ≤IsPropValued : {a b : MutualOrd} → isProp (a ≤ b)
 MutualOrdIsDiscrete : Discrete MutualOrd
 MutualOrdIsSet : isSet MutualOrd
-MutualOrd⁼ : {r : a ≥ fst b} {s : c ≥ fst d} → a ≡ c → b ≡ d
-           → ω^ a + b [ r ] ≡ ω^ c + d [ s ]
 
 <IsPropValued  <₁       <₁       = refl
 <IsPropValued (<₂ p)   (<₂ q)    = cong <₂ (<IsPropValued p q)
@@ -98,12 +97,18 @@ MutualOrdIsDiscrete  𝟎               (ω^ b + d [ s ]) = no 𝟎≢ω
 MutualOrdIsDiscrete (ω^ a + b [ r ])  𝟎               = no ω≢𝟎
 MutualOrdIsDiscrete (ω^ a + b [ r ]) (ω^ c + d [ s ]) with MutualOrdIsDiscrete a c
 MutualOrdIsDiscrete (ω^ a + b [ r ]) (ω^ c + d [ s ]) | yes a≡c with MutualOrdIsDiscrete b d
-MutualOrdIsDiscrete (ω^ a + b [ r ]) (ω^ c + d [ s ]) | yes a≡c | yes b≡d = yes (MutualOrd⁼ a≡c b≡d)
+{--- Pattern match on b, to please Agda's termination checker ---}
+MutualOrdIsDiscrete (ω^ a + 𝟎 [ r ]) (ω^ c + d [ s ]) | yes a≡c | yes 𝟎≡d
+    with PropEqfromPath a≡c | PropEqfromPath 𝟎≡d
+... | P.refl | P.refl = yes (cong (ω^ a + 𝟎 [_]) (≤IsPropValued r s))
+MutualOrdIsDiscrete (ω^ a + b@(ω^ _ + _ [ _ ]) [ r ]) (ω^ c + d [ s ]) | yes a≡c | yes b≡d
+    with PropEqfromPath a≡c | PropEqfromPath b≡d
+... | P.refl | P.refl = yes (cong (ω^ a + b [_]) (≤IsPropValued r s))
+{------------------- End of pattern matching --------------------}
 MutualOrdIsDiscrete (ω^ a + b [ r ]) (ω^ c + d [ s ]) | yes a≡c | no  b≢d = no (λ e → b≢d (cong rest e))
 MutualOrdIsDiscrete (ω^ a + b [ r ]) (ω^ c + d [ s ]) | no  a≢c = no (λ e → a≢c (cong fst e))
 
 {-- Inlining the proof of "Discrete→isSet MutualOrdIsDiscrete" --}
-
 ≡-normalise : a ≡ b → a ≡ b
 ≡-normalise {a} {b} a≡b with MutualOrdIsDiscrete a b
 ... | yes p = p
@@ -124,28 +129,13 @@ MutualOrdIsSet p q =
   cong ((≡-normalise refl) ⁻¹ ∙_) (≡-normalise-constant p q) ∙
   ≡-canonical q
 {--  MutualOrdIsSet = Discrete→isSet MutualOrdIsDiscrete _ _   --}
-
 {--------------------- End of the inlining ----------------------}
-
-import Agda.Builtin.Equality as P
-
-MutualOrd⁼ {a} {b} a≡c b≡d with PropEqfromPath a≡c | PropEqfromPath b≡d
-... | P.refl | P.refl = cong (ω^ a + b [_]) (≤IsPropValued _ _)
 
 {---------------- End of the simultaneous proofs ----------------}
 {----------------------------------------------------------------}
 
-\end{code}
-
-Agda reports a termination error if we prove MutualOrdIsSet directly
-using Discrete→isSet from the cubical library.  So we have to inline
-the proof of "Discrete→isSet MutualOrdIsDiscrete".
-
-Agda reports another termination error when we prove MutualOrd⁼ using
-the cubical subst function, e.g.
-
------------------ Begin of code -----------------
-
+MutualOrd⁼ : {r : a ≥ fst b} {s : c ≥ fst d} → a ≡ c → b ≡ d
+           → ω^ a + b [ r ] ≡ ω^ c + d [ s ]
 MutualOrd⁼ {a} a≡c = subst P a≡c pa
  where
   P : MutualOrd → Type₀
@@ -158,10 +148,19 @@ MutualOrd⁼ {a} a≡c = subst P a≡c pa
     qb : Q b
     qb = cong (ω^ a + b [_]) (≤IsPropValued _ _)
 
------------------- End of code ------------------
+\end{code}
 
-We instead convert paths to Agda's propositional equality which we can
-pattern match on directly.
+Agda reports a termination error if we prove MutualOrdIsSet directly
+using Discrete→isSet from the cubical library.  So we have to inline
+the proof of "Discrete→isSet MutualOrdIsDiscrete".
+
+Agda reports another termination error when using MutualOrd⁼ to prove
+MutualOrdIsDiscrete.  In an earlier development version of Agda
+(e.g. commit: 292237b2da99a57cb2bef78ab38d5d45f9fb316c), we could
+solve it by converting paths to Agda's propositional equality.  But
+this trick isn't sufficient in the current version because of the Agda
+issue 4725 <https://github.com/agda/agda/issues/4725>.  We have to
+additionally pattern match a certain argument of MutualOrdIsDiscrete.
 
 \begin{code}
 
@@ -198,7 +197,6 @@ pattern match on directly.
 Lm[≥→¬<] : a ≥ b → ¬ a < b
 Lm[≥→¬<] (inj₁ b<a) a<b = <-irrefl (<-trans a<b b<a)
 Lm[≥→¬<] (inj₂ a=b)     = <-irreflexive a=b
-
 
 Lm[<→¬≥] : a < b → ¬ a ≥ b
 Lm[<→¬≥] a<b (inj₁ a>b) = <-irrefl (<-trans a<b a>b)
